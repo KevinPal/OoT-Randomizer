@@ -51,6 +51,7 @@
 .include "quickboots.asm"
 .include "chests.asm"
 .include "debug.asm"
+.include "adult_shooting.asm"
 .importobj "../build/bundle.o"
 FONT_TEXTURE:
 .incbin("../resources/font.bin")

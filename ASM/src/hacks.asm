@@ -1035,3 +1035,7 @@ skip_GS_BGS_text:
 .org 0xBEA044
    jal      warp_speedup
    nop
+
+.org 0xD35A7C
+   jal		adult_shooting_gallery_fix
+   nop
