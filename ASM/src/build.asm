@@ -52,6 +52,7 @@
 .include "dpad.asm"
 .include "chests.asm"
 .include "debug.asm"
+.include "cow.asm"
 .importobj "../build/bundle.o"
 .align 8
 FONT_TEXTURE:
