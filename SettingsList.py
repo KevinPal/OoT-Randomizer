@@ -988,6 +988,21 @@ setting_infos = [
             default        = True,
             shared         = True,
             ),
+    Checkbutton(
+            name           = 'shuffle_cows',
+            args_help      = '''\
+                             Playing Epona's song infront of cows will give items.
+                             ''',
+            gui_text       = 'Shuffle Cows',
+            gui_group      = 'shuffle',
+            gui_tooltip    = '''\
+                             Enabling this causes playing Epona's song infront
+                             of cows to give an item. There are 9 cows, and an
+                             extra in MQ Jabu
+                             ''',
+            default        = False,
+            shared         = True,
+            ),
     Combobox(
             name           = 'shuffle_scrubs',
             default        = 'off',
