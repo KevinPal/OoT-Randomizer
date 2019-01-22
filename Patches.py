@@ -892,6 +892,8 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
     # Revert change that Skips the Epona Race
     if not world.no_epona_race:
         rom.write_int32(0xA9E838, 0x03E00008)
+    else:
+        write_bits_to_save(0xF0E, 0x01) # Set talked to Malon flag
 
     # skip castle guard stealth sequence
     if world.no_guard_stealth:
@@ -1300,15 +1302,17 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
             rom.write_int16(0x321B176, 0xFC40) # original 0xFC48
 
         #Move spirit temple compass chest if it is a small chest so it is reachable with hookshot 
-        spirit_compass_item = [l for l in world.get_locations() if 'Spirit Temple' in l.name and 'Compass Chest' in l.name][0].item
-        if 'Small Key' in spirit_compass_item.name or not spirit_compass_item.advancement:
-            if not world.dungeon_mq['Spirit Temple']:
-                chest_address = 0x2B6B07C
-            else:
-                chest_address = 0x2B6FCDC
+        for chest_name, chest_address in [('Spirit Temple Compass Chest', 0x2B6B07C), ('Spirit Temple MQ Compass Chest', 0x2B6FCDC)]:
+            try:
+                location = world.get_location(chest_name)
+            except KeyError:
+                # MQ/Vanilla veriant does not exist
+                continue
 
-            rom.write_int16(chest_address + 2, 0x0190) #X pos
-            rom.write_int16(chest_address + 6, 0xFABC) #Z pos
+            item = read_rom_item(rom, location.item.index)
+            if item['chest_type'] == 1 or item['chest_type'] == 3:
+                rom.write_int16(chest_address + 2, 0x0190) #X pos
+                rom.write_int16(chest_address + 6, 0xFABC) #Z pos
 
     # give dungeon items the correct messages
     add_item_messages(messages, shop_items, world)

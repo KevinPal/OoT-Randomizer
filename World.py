@@ -175,7 +175,7 @@ class World(object):
                 if region.name == regionname:
                     self._region_cache[regionname] = region
                     return region
-            raise RuntimeError('No such region %s' % regionname)
+            raise KeyError('No such region %s' % regionname)
 
 
     def get_entrance(self, entrance):
@@ -189,7 +189,7 @@ class World(object):
                     if exit.name == entrance:
                         self._entrance_cache[entrance] = exit
                         return exit
-            raise RuntimeError('No such entrance %s' % entrance)
+            raise KeyError('No such entrance %s' % entrance)
 
 
     def get_location(self, location):
@@ -203,7 +203,7 @@ class World(object):
                     if r_location.name == location:
                         self._location_cache[location] = r_location
                         return r_location
-        raise RuntimeError('No such location %s' % location)
+        raise KeyError('No such location %s' % location)
 
 
     def get_items(self):
@@ -326,14 +326,7 @@ class World(object):
                location.item.type == "Event":
                 continue
 
-            # We should consider GT and GC as the same area or it's confusing.
-            # You can get a hint GC is barren and a player might think that
-            # GT is also barren when it is not. They are separate scenes in
-            # the rom data, but one dungeon logically.
-            if location.hint == "Ganon's Tower":
-                area = "Ganon's Castle"
-            else:
-                area = location.hint
+            area = location.hint
 
             # Build the area list and their items
             if area not in areas:
