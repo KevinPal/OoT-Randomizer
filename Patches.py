@@ -15,6 +15,7 @@ from Messages import read_messages, update_message_by_id, read_shop_items, \
 from OcarinaSongs import replace_songs
 from MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 
+from Models import write_model_to_rom
 
 def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
     with open(data_path('generated/rom_patch.txt'), 'r') as stream:
@@ -22,6 +23,16 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
             address, value = [int(x, 16) for x in line.split(',')]
             rom.write_int32(address, value)
     rom.scan_dmadata_update()
+
+
+    rupee_file = File({
+            'Name':'object_gi_rupy',
+            'Start':'01914000',
+            'End':'01914800'
+        })
+
+
+    write_model_to_rom('blender.obj', rupee_file, rom)
 
     # Write Randomizer title screen logo
     with open(data_path('title.bin'), 'rb') as stream:
