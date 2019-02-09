@@ -191,16 +191,13 @@ def load_obj(path):
 
                 vertex.update_vertex(data, d_type[0])
             vertices.append(vertex)
-    print(len(vertices))
     return vertices
 
 def get_displaylist_data(vertices, scale=1):
-    for v in vertices:
-        print(v)
     all_v_buffers = [[]]
     all_faces = [[]]
     for index in range(0, int(len(vertices)), 3):
-        vbixs = [-1, -1, -1]
+        vbixs = [-2, -2, -2]
         for i in range(0, 3):
             v = vertices[index + i]
             try:
@@ -211,14 +208,17 @@ def get_displaylist_data(vertices, scale=1):
                     all_v_buffers.append([])
                     all_faces.append([])
                     for j, old_vbidx in enumerate(vbixs):
-                        if old_vbidx == -1:
-                            continue
+                        if old_vbidx == -2:
+                            all_v_buffers[-1].append(v)
+                            vbixs[j] = len(all_v_buffers[-1]) - 1
+                            break
                         else:
                             all_v_buffers[-1].append(all_v_buffers[-2][old_vbidx])
-                            vbixs[j] = len(all_v_buffers[-1])-1
+                            vbixs[j] = len(all_v_buffers[-1]) - 1
                 else:
                     all_v_buffers[-1].append(v)
-                    vbixs[i] = len(all_v_buffers[-1])-1
+                    vbixs[i] = len(all_v_buffers[-1]) - 1
+        print(vbixs)
         all_faces[-1].append( Face(*vbixs))
 
     vertex_buffer_data = []

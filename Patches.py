@@ -24,7 +24,7 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
             rom.write_int32(address, value)
     rom.scan_dmadata_update()
 
-
+    
     rupee_file = File({
             'Name':'object_gi_rupy',
             'Start':'01914000',
@@ -33,6 +33,25 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
 
 
     write_model_to_rom('blender.obj', rupee_file, rom)
+    
+    print(str(hex(rupee_file.end - rupee_file.start)))
+
+    rom.write_int32(0x00B6EF50 + 8 + 8 * 0x17F, rupee_file.start)
+    rom.write_int32(0x00B6EF50 + 8 + 8 * 0x17F + 4, rupee_file.end)
+
+    '''
+    rupee_file = File({
+            'Name':'object_mjin',
+            'Start':'01277000',
+            'End':'01278290'
+        })
+
+
+    write_model_to_rom('blender.obj', rupee_file, rom)
+    
+    rom.write_int32(0x00B6EF50 + 8 + 8 * 0x61, rupee_file.start)
+    rom.write_int32(0x00B6EF50 + 8 + 8 * 0x61 + 4, rupee_file.end)
+    '''
 
     # Write Randomizer title screen logo
     with open(data_path('title.bin'), 'rb') as stream:

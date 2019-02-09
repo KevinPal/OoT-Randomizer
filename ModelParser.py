@@ -104,7 +104,7 @@ def get_objectfile_data(file, rom):
 
     opcodes = []
     raw_data = []
-    for address in range(file.start, file.end, 4):
+    for address in range(file.start, file.end, 8):
         
         data = (rom.read_int32(address) << 32) | rom.read_int32(address+4)
         code = mask(data, 0x80)
@@ -141,15 +141,17 @@ def get_objectfile_data(file, rom):
         raw_data.append(None if raw == None else raw)
 
     last_vertex = 0
-
+    last_end = 0
     for line, opcode in enumerate(opcodes):
+        if opcode != None and opcode.name == "gsSPEndDisplayList":
+            last_end = line
         if opcode != None and opcode.name == "gsSPVertex" and not opcode.is_data and mask(opcode.vaddr, 0x08) == 0x06:
             start_offset = int(mask(opcode.vaddr, 0x07) / 8)
             for data_line in range(start_offset, start_offset + opcode.numv*2):
                 opcodes[data_line] = None
                 last_vertex = line
 
-    return (opcodes, raw_data, last_vertex)
+    return (opcodes, raw_data, last_vertex, last_end)
 
 def clear_renders(file, rom, opcodes=None):
     if opcodes == None:
@@ -158,8 +160,8 @@ def clear_renders(file, rom, opcodes=None):
     for i, opcode in enumerate(opcodes):
         if opcode != None and not opcode.is_data and (opcode.name == "gsSP1Triangle" or opcode.name == "gsSP2Triangle"):
             opcodes[i] = opcode_data[0xE0]
-            rom.write_int32(file.start + line * 4, 0xE0000000)
-            rom.write_int32(file.start + line * 4 + 4, 0x00000000)
+            rom.write_int32(file.start + line * 8, 0xE0000000)
+            rom.write_int32(file.start + line * 8 + 8, 0x00000000)
         line += 1
 
 opcode_data = {
