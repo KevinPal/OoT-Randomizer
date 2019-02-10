@@ -52,7 +52,7 @@ def write_model_to_rom(path, file, rom):
         group += 1
     '''
     last_group = group
-    v_write = file.end + r_data_len + 16
+    v_write = file.end + r_data_len + 32
     print("Startinv v_write: " + str(hex(v_write)))
     print("Starting r_write: " + str(hex(r_write)))
     for group in range(0, len(v_data)):
