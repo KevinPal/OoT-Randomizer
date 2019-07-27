@@ -13,6 +13,7 @@
 #include "ganon.h"
 #include "extern_ctxt.h"
 #include "fog.h"
+#include "trade.h"
 
 void c_init() {
     heap_init();
@@ -29,6 +30,7 @@ void before_game_state_update() {
     update_heart_colors();
     process_extern_ctxt();
     override_fog_state();
+    handle_trade_quest();
 }
 
 void after_game_state_update() {
