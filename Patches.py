@@ -48,12 +48,22 @@ def patch_rom(spoiler:Spoiler, world:World, rom:Rom):
         rom.write_bytes(writeAddress, keatonBytes)
 
     # Load Triforce model into a file
-    triforce_obj_file = File({ 'Name': 'object_gi_triforce' })
+    triforce_obj_file = File({ 
+        'Name': 'object_gi_egg',
+        'Start': '015B6000',
+        'End': '015B7320',
+    })
+
+    primColor = [0xFA, 0x00, 0x00, 0x00, 0xDB, 0xA9, 0xD8, 0xFF]
+    rom.write_bytes(triforce_obj_file.start + 0xFF0, primColor)
+    envColor = [0xFB, 0x00, 0x00, 0x00, 0xD1, 0x7B, 0xCC, 0xFF]
+    rom.write_bytes(triforce_obj_file.start + 0xFF8, envColor)
+
     triforce_obj_file.copy(rom)
-    with open(data_path('triforce.bin'), 'rb') as stream:
-        obj_data = stream.read()
-        rom.write_bytes(triforce_obj_file.start, obj_data)
-        triforce_obj_file.end = triforce_obj_file.start + len(obj_data)
+#     with open(data_path('triforce.bin'), 'rb') as stream:
+#         obj_data = stream.read()
+#         rom.write_bytes(triforce_obj_file.start, obj_data)
+#         triforce_obj_file.end = triforce_obj_file.start + len(obj_data)
     update_dmadata(rom, triforce_obj_file)
     # Add it to the extended object table
     add_to_extended_object_table(rom, 0x193, triforce_obj_file)
