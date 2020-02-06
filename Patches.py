@@ -58,6 +58,8 @@ def patch_rom(spoiler:Spoiler, world:World, rom:Rom):
     rom.write_bytes(triforce_obj_file.start + 0xFF0, primColor)
     envColor = [0xFB, 0x00, 0x00, 0x00, 0xD1, 0x7B, 0xCC, 0xFF]
     rom.write_bytes(triforce_obj_file.start + 0xFF8, envColor)
+#    end_list = [0xdf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+#    rom.write_bytes(triforce_obj_file.start + 0x1180, end_list)
 
     triforce_obj_file.copy(rom)
 #     with open(data_path('triforce.bin'), 'rb') as stream:
